@@ -79,6 +79,7 @@ RunHarmony.Seurat <- function(
   reduction.save = "harmony",
   assay.use = NULL,
   project.dim = TRUE,
+  weight.by = NULL,
   ...
 ) {
   if (!requireNamespace('Seurat', quietly = TRUE)) {
@@ -121,6 +122,20 @@ RunHarmony.Seurat <- function(
     group.by.vars,
     cells = Seurat::Cells(x = object[[reduction]])
   )
+  
+    ## if using weights, set them up here
+  if (is.null(weight.by)) {
+    weights <- NULL
+  } else {
+    if (!weight.by %in% colnames(object@meta.data)) {
+        stop('Weighting variable not in meta.data')
+    }
+    y <- object@meta.data[[weight.by]]
+    if (!is(y, 'character') & !is(y, 'factor')) {
+        stop('Weighting variable must either encode factor or character type. Numerical not permitted.')
+    }
+    weights <- as.numeric(((1 / table(y))[y]) * (length(y) / length(unique(y))))
+  }
 
   harmonyEmbed <- HarmonyMatrix(
     embedding,
@@ -142,6 +157,7 @@ RunHarmony.Seurat <- function(
     FALSE,
     verbose,
     reference_values
+	weights=weights
   )
 
   reduction.key <- Seurat::Key(reduction.save, quiet = TRUE)

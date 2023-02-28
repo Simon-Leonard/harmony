@@ -28,6 +28,7 @@
 #' @importFrom methods is
 #' @importFrom cowplot plot_grid
 #' @importFrom rlang .data
+#' @importFrom flexclust cclust
 #' @importFrom rlang `%||%`
 #' @importFrom stats model.matrix
 loadModule("harmony_module", TRUE)
