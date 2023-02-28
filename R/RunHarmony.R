@@ -156,8 +156,8 @@ RunHarmony.Seurat <- function(
     plot_convergence,
     FALSE,
     verbose,
-    reference_values
-	weights=weights
+    reference_values,
+    weights=weights
   )
 
   reduction.key <- Seurat::Key(reduction.save, quiet = TRUE)
